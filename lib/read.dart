@@ -21,26 +21,7 @@ class ReadPage extends StatelessWidget {
             padding: EdgeInsets.all(15),
             child: _ReadPage(),
           ),
-          Row(
-            children: [
-              Container(
-                child: ElevatedButton(
-                    onPressed: () {
-                      print("삭제");
-                      delete();
-                    },
-                    child: Text('삭제')
-                ),
-              ),
 
-              Container(
-                child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text('수정')
-                ),
-              ),
-            ],
-          )
         ],
       ),
 
@@ -173,6 +154,33 @@ class _ReadPageState extends State<_ReadPage> {
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    Container(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            print("삭제");
+                            deletePerson(personId);
+                          },
+                          child: Text('삭제')
+                      ),
+                    ),
+
+                    Container(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, "/modify",
+                                arguments: {
+                                  "personId": snapshot.data!.personId
+                                }
+                              );
+                          },
+                          child: Text('수정')
+                      ),
+                    ),
+                  ],
+                )
               ],
           );
         } // 데이터가있으면
@@ -211,18 +219,8 @@ class _ReadPageState extends State<_ReadPage> {
     }
   }
 
-  void delete(){
-    //라우터로 전달받은 personId
-    // ModalRoute를 통해 현재 페이지에 전달된 arguments를 받음
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
-
-    //'personId' 키를 사용하여 값을 추출합니다.
-    late final personId = args['personId'];
-    deletePerson(personId);
-  }
-
   //삭제하기
-  Future<PersonVo> deletePerson(int personId) async{
+  Future<int> deletePerson(int personId) async{
     print("deletePerson(): 데이터 가져오는 중");
 
     //코드 작성
@@ -242,8 +240,11 @@ class _ReadPageState extends State<_ReadPage> {
       if (response.statusCode == 200) {
         //접속성공 200 이면
         print(response.data); // json->map 자동변경
-        Navigator.pushNamed(context, "/list");
-        return PersonVo.fromJson(response.data);
+
+        int count = response.data;
+
+        Navigator.pushNamed( context, "/list");
+        return count;
       } else {
         //접속실패 404, 502등등 api서버 문제
         throw Exception('api 서버 문제'); }

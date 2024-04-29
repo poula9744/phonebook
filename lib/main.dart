@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:phonebook/list.dart';
+import 'package:phonebook/modifyform.dart';
 import 'read.dart';
 import 'list.dart';
 import 'writeform.dart';
+import 'modifyform.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
         "/read": (context) => ReadPage(),
         "/list": (context) => ListPage(),
         "/write": (context) => WriteForm(),
+        "/modify": (context) => ModifyForm(),
       },
     );
   }
